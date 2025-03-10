@@ -1,0 +1,27 @@
+import pandas as pd 
+from sklearn.model_selection import train_test_split  
+from sklearn.linear_model import LogisticRegression  
+from sklearn.metrics import accuracy_score, confusion_matrix  
+import matplotlib.pyplot as plt
+import seaborn as sns 
+data = {
+    "age": [22, 25, 27, 30, 35, 40, 45, 50, 55, 60],
+    "annual income": [30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000],
+    "purchased": [0, 0, 0, 0, 1, 1, 1, 1, 1, 1]  
+}
+df = pd.DataFrame(data)
+X = df[['age', 'annual income']]
+y = df['purchased']  
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+log_reg = LogisticRegression()  
+log_reg.fit(X_train, y_train)
+y_pred = log_reg.predict(X_test)accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy * 100:.2f}%")  
+conf_matrix = confusion_matrix(y_test, y_pred)  
+print("Confusion matrix:")
+print(conf_matrix)
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['no', 'yes'], yticklabels=['no', 'yes']) 
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
